@@ -1,0 +1,50 @@
+
+echo  "**************************************************************"
+echo  "************Start load .synopsys_dc.setup*********************"
+echo  "**************************************************************"
+
+set     SYN_ROOT_PATH     /home/IC/Desktop/IC/dc_project/fsm_moore
+set     RTL_PATH          $SYN_ROOT_PATH/rtl
+set     CONFIG_PATH       $SYN_ROOT_PATH/config
+set     SCRIPT_PATH       $SYN_ROOT_PATH/script
+set     MAPPED_PATH       $SYN_ROOT_PATH/mapped
+set     REPORT_PATH       $SYN_ROOT_PATH/report
+set     UNMAPPED_PATH     $SYN_ROOT_PATH/unmapped
+
+# Define work directory
+set     WORK_PATH         /home/IC/Desktop/IC/dc_project/fsm_moore/work
+set     DC_PATH           /opt/Synopsys/Synplify2015
+define_design_lib work    -path $WORK_PATH
+
+set     SYMBOL_PATH  /opt/Foundary_Library/TSMC90/aci/sc-x/symbols/synopsys
+set     LIB_PATH     /opt/Foundary_Library/TSMC90/aci/sc-x/synopsys
+
+set_app_var    search_path           [list . $search_path $LIB_PATH  \
+                                             $SYMBOL_PATH $RTL_PATH  \
+                                             $SCRIPT_PATH            \
+                                             ${DC_PATH}/libraries/syn]
+# This variables are automatically set if you perform ultra command.
+# Specify for use during optimization.
+# You do not need to de anything to access the standard library, 
+# DC is setup to use this library by default
+set_app_var    synthetic_library     [list dw_foundation.sldb standard.sldb]
+
+set_app_var    target_library        [list slow.db]
+# Specify for cell resolution during link
+set_app_var    link_library          [list *  ${target_library}           ]
+set_app_var    symbol_library        [list generic.sdb]
+
+# Source the naming rules
+
+echo  "**************************************************************"
+echo  "************End of load .synopsys_dc.setup********************"
+echo  "**************************************************************"
+
+echo  "**************************************************************"
+echo  "************Start source hs_name_rules.v**********************"
+echo  "**************************************************************"
+source  -v -e   ./hs_name_rules.tcl
+
+echo  "**************************************************************"
+echo  "************End of source hs_name_rules.v*********************"
+echo  "**************************************************************"
